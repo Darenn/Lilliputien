@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KillOnTrigger : MonoBehaviour {
+public class KilledOnTrigger : MonoBehaviour {
 
     public Killable ObjectToKill;
 

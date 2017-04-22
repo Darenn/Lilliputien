@@ -27,8 +27,15 @@ public class Percing : MonoBehaviour {
 
     public void Unearth(float timeToReachCore)
     {
-        toUnearth = true;
-        this.speedPerSeconds = (SizeToReachCore - baseScale) / timeToReachCore;
+        if (baseScale >= transform.localScale.y)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            toUnearth = true;
+            this.speedPerSeconds = (SizeToReachCore - baseScale) / timeToReachCore;
+        }
     }
 
     private void Update()

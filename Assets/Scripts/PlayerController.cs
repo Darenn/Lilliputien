@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rigidbody;
     private bool IsOnGround = false;
     private Percing percing;
+    private PercingAir percingAir;
 
     private void Awake()
     {
@@ -23,10 +24,13 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 		Vector2 move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         rigidbody.AddRelativeForce(new Vector2(MovingForce * move.x, 0));
+            //rigidbody.velocity = new Vector2(transform.right.x * move.x * MovingForce, transform.right.y * move.x * MovingForce);
 
         if (Input.GetButtonDown("Jump") && IsOnGround)
         {
+            
             rigidbody.AddRelativeForce(new Vector2(0, JumpForce));
+            //rigidbody.velocity = new Vector2(transform.right.x * move.x * MovingForce, transform.right.y * move.x * MovingForce)  + new Vector2(transform.up.x * JumpForce, transform.up.y * JumpForce);
             IsOnGround = false;
         }
 
@@ -40,9 +44,12 @@ public class PlayerController : MonoBehaviour {
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, MaxVelocity * Mathf.Sign(rigidbody.velocity.y));
         }
 
-        if (Input.GetButton("Fire1") && percing != null)
+        if (Input.GetButton("Fire1"))
         {
-            percing.Unearth(TimeToUnreachCore);
+            if (percingAir != null)
+                percingAir.Unearth(TimeToUnreachCore);
+            else if (percing != null)
+                percing.Unearth(TimeToUnreachCore);
         }
     }
 
@@ -52,14 +59,25 @@ public class PlayerController : MonoBehaviour {
         if (collision.CompareTag("Percing"))
         {
             percing = collision.GetComponent<Percing>();
+            if (percing == null)
+                percingAir = collision.GetComponent<PercingAir>();
         }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Planet"))
+            IsOnGround = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Percing"))
         {
-            percing = null;
+            if (collision.GetComponent<Percing>())
+                percing = null;
+            else if (collision.GetComponent<PercingAir>())
+                percingAir = null;
         }
     }
 }
