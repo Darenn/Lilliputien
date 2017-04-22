@@ -42,7 +42,6 @@ public class ApplyGravityForce : MonoBehaviour {
         Vector2 C = transform.position.normalized - other.transform.position;
         float Angle = Mathf.Atan2(C.y, C.x);
         float AngleInDegrees = Angle * Mathf.Rad2Deg;
-        Debug.Log("Atan2 Angle in degrees " + AngleInDegrees);
         other.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90 + AngleInDegrees));
     }
 }
