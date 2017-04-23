@@ -8,6 +8,7 @@ public class Wall : MonoBehaviour {
     public SpriteRenderer[] weakZones;
     public Color good;
     public Color outch;
+    private bool invicible = false;
 
     private void Awake()
     {
@@ -16,16 +17,16 @@ public class Wall : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !invicible)
         {
+            invicible = true;
             foreach (SpriteRenderer sp in weakZones)
                 sp.color = outch;
             StartCoroutine(rePutBlue());
-            Debug.Log("bla");
             HP--;
             if (HP <= 0)
             {
-                Destroy(gameObject);
+                Destroy(transform.parent.gameObject);
 
             }
         }
@@ -34,7 +35,8 @@ public class Wall : MonoBehaviour {
     IEnumerator rePutBlue()
     {
         yield return new WaitForSeconds(.5f);
-        foreach (SpriteRenderer sp in weakZones)
-            sp.color = good;
+        /*foreach (SpriteRenderer sp in weakZones)
+            sp.color = good;*/
+        invicible = false;
     }
 }

@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour {
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, MaxVelocity * Mathf.Sign(rigidbody.velocity.y));
         }
 
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButton("Action"))
         {
             if (percingAir != null)
                 percingAir.Unearth(TimeToUnreachCore);
@@ -68,6 +68,13 @@ public class PlayerController : MonoBehaviour {
     {
         if (collision.CompareTag("Planet"))
             IsOnGround = true;
+
+        if (collision.CompareTag("Percing"))
+        {
+            percing = collision.GetComponent<Percing>();
+            if (percing == null)
+                percingAir = collision.GetComponent<PercingAir>();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

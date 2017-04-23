@@ -20,9 +20,13 @@ public class Percer : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.CompareTag("Percing"))
+        {
+            percing = collision.gameObject;
+        }
         if (collision.gameObject.CompareTag("Planet"))
         {
-            percing = Instantiate(PercingPrefab, transform.position, transform.rotation);
+            if (percing == null) percing = Instantiate(PercingPrefab, transform.position, transform.rotation);
             GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
         }
     }
